@@ -38,32 +38,61 @@
 //он его сохраняет и по нему гонит новые запросы
 //************
 //************
-//Эхо-сервер на Node.js
-//Эхо-сервер - сервер, который при запросе на url http://127.0.0.1/echo?message=Hello->Hello
-//с параметром message выдаёт значение этого параметра Hello,
-//а на все другие зпросы отвечает страница не найдена
+// //Эхо-сервер на Node.js - это протоип реального приложения
+// //Реальное приложение получает запросы различного вида и выдают на них ответы
+// //Эхо-сервер - сервер, который при запросе на url http://127.0.0.1:1337/echo?message=Hello -> Hello
+// //с параметром message выдаёт значение этого параметра Hello,
+// //а на все другие зпросы отвечает страница не найдена
+// var http = require('http');
+// //Создаём сервер и ему даётся вункция обработчик на request
+// var url = require('url');
+//
+// var server = new http.Server(function (req, res) {
+//     console.log(req.method, req.url);//req.method -> GET, req.url -> /echo?message=Hello
+//     //Браузер ничего не вывел, он ожидает ответа,
+//     //потому что сервер, если не дать явной команды в ответ делать ничего не будет
+//     //это явное отличие Node.js - он будет делать то, что ему скажешь
+//     var urlParsed = url.parse(req.url, this);//url.parse разбирает переданную строку запроса
+//     console.log(urlParsed);
+//     //Показывает объект url, в котором находится query: 'message=Hello' pathname: '/echo',
+//
+//     if (urlParsed.pathname == '/echo' && urlParsed.query.message) {//Т.к query, в объекте Url строка, то в url.parse добавляем this, которая разберёт строку query: 'message=Hello',
+// // отсюда urlParsed.query.message будет его значение
+//         res.end( urlParsed.query.message )
+//     }
+//     else{
+//         res.statusCode = 404;
+//         res.end('Page no found')
+//     }
+// });
+//
+// server.listen(1337, '127.0.0.1')
+//************
+//************
+//Работа с заголовками
+//http://127.0.0.1:1337/echo?message=Hello -> Hello
 var http = require('http');
-//Создаём сервер и ему даётся вункция обработчик на request
 var url = require('url');
 
 var server = new http.Server(function (req, res) {
-    console.log(req.method, req.url);//req.method -> GET, req.url -> /echo?message=Hello
-    //Браузер ничего не вывел, он ожидает ответа,
-    //потому что сервер, если не дать явной команды в ответ делать ничего не будет
-    //это явное отличие Node.js - он будет делать то, что ему скажешь
-    var urlParsed = url.parse(req.url, this);//url.parse разбирает переданную строку запроса
-    console.log(urlParsed);
-    //Показывает объект url, в котором находится query: 'message=Hello' pathname: '/echo',
+    //Когда браузер делает запрос, он вместе с url отправляет дополнительную информацию:
+    //что это за браузер и информацию которую он хочет запросить
+    console.log(req.headers)
 
-    if (urlParsed.pathname == '/echo' && urlParsed.query.message) {//Т.к query, в объекте Url строка, то в url.parse добавляем this, которая разберёт строку query: 'message=Hello',
-// отсюда urlParsed.query.message будет его значение
+    //В ответ на запрос сервер отвечает телом страницы и то же заголовками,
+    //в которых находится статус - statusCode,
+    //как правило statusCode = 200 - это значит, что страница сгенерированна нормально
+    var urlParsed = url.parse(req.url, this);
+
+    if (urlParsed.pathname == '/echo' && urlParsed.query.message) {
+        res.setHeader('Cache-control', 'no-cache');//Результаты ответа сервера не будут кэшироваться
         res.end( urlParsed.query.message )
     }
     else{
-        res.statusCode = 404;
+        res.statusCode = 404;//Это статус - страница не найдена
         res.end('Page no found')
     }
 });
 
-server.listen(1337, '127.0.0.1')
+server.listen(1337, '127.0.0.1');
 //************

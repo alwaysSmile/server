@@ -56,7 +56,8 @@
 //     console.log(urlParsed);
 //     //Показывает объект url, в котором находится query: 'message=Hello' pathname: '/echo',
 //
-//     if (urlParsed.pathname == '/echo' && urlParsed.query.message) {//Т.к query, в объекте Url строка, то в url.parse добавляем this, которая разберёт строку query: 'message=Hello',
+//     if (urlParsed.pathname == '/echo' && urlParsed.query.message) {//Т.к query, в объекте Url строка, то в url.parse добавляем this,
+// //которая разберёт строку query: 'message=Hello',
 // // отсюда urlParsed.query.message будет его значение
 //         res.end( urlParsed.query.message )
 //     }
@@ -77,7 +78,7 @@ var url = require('url');
 var server = new http.Server(function (req, res) {
     //Когда браузер делает запрос, он вместе с url отправляет дополнительную информацию:
     //что это за браузер и информацию которую он хочет запросить
-    console.log(req.headers)
+    console.log(req.headers);
 
     //В ответ на запрос сервер отвечает телом страницы и то же заголовками,
     //в которых находится статус - statusCode,
@@ -85,8 +86,21 @@ var server = new http.Server(function (req, res) {
     var urlParsed = url.parse(req.url, this);
 
     if (urlParsed.pathname == '/echo' && urlParsed.query.message) {
+        //******* 1 способ
+        //setHeader - добавляет заголовок
+        //removeHeader - удаляет заголовок
         res.setHeader('Cache-control', 'no-cache');//Результаты ответа сервера не будут кэшироваться
+        //При этом заголовки будут отправляться на сервер ни когда мы написали,
+        //а вместе с какой-то записью каких-то данных, например вызов res.end( urlParsed.query.message )
+        //отправляет res.end и заголовки тоже
         res.end( urlParsed.query.message )
+        //******* 1 способ
+
+        // //******* 2 способ Управления заголовками называется явный
+        // res.writeHeader(200, "OK", {'Cache-control': 'no-cache'});//Он отличается от .setHeader тем,
+        // // что заголовки пишутся тут же, не ожидая начала ближайшей записи
+        // res.end( urlParsed.query.message )
+        // //******* 2 способ
     }
     else{
         res.statusCode = 404;//Это статус - страница не найдена

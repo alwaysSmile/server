@@ -1,5 +1,5 @@
 //************
-// //Node.js как web-сервер
+//Node.js как web-сервер
 // var http = require('http');//Полключаем модуль http
 // //http.Server() - умеет слушать ip - порт
 // //и отвечать на входящие запросы
@@ -44,9 +44,9 @@
 // //с параметром message выдаёт значение этого параметра Hello,
 // //а на все другие зпросы отвечает страница не найдена
 // var http = require('http');
-// //Создаём сервер и ему даётся функция-обработчик на request
-// var url = require('url');
 //
+// var url = require('url');//Модуль url используем, чтобы разобрать переданную строку запроса
+// //Создаём сервер и ему даётся функция-обработчик на request
 // var server = new http.Server(function (req, res) {
 //     console.log(req.method, req.url);//req.method -> GET, req.url -> /echo?message=Hello
 //     //Браузер ничего не вывел, он ожидает ответа,
@@ -67,10 +67,10 @@
 //     }
 // });
 //
-// server.listen(1337, '127.0.0.1')
+// server.listen(1337, '127.0.0.1');
 //************
 //************
-//Работа с заголовками
+// //Работа с заголовками
 //http://127.0.0.1:1337/echo?message=Hello -> Hello
 var http = require('http');
 var url = require('url');
@@ -110,4 +110,4 @@ var server = new http.Server(function (req, res) {
 
 server.listen(1337, '127.0.0.1');
 //************
-//**kjkj
+

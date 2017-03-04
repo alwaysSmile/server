@@ -1,4 +1,4 @@
-//************
+//************width node library
 //Node.js как web-сервер
 var http = require('http');//Полключаем модуль http
 //http.Server() - умеет слушать ip - порт

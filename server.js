@@ -77,18 +77,19 @@
 
 //************
 //Работа с заголовками
-http://127.0.0.1:1337/echo?message=Hello -> Hello
-    var http = require('http');
+// http://127.0.0.1:1337/echo?message=Hello -> Hello
+var http = require('http');
 var url = require('url');
 
 var server = new http.Server(function (req, res) {
     //Когда браузер делает запрос, он вместе с url отправляет дополнительную информацию:
     //что это за браузер и информацию которую он хочет запросить
-    console.log(req.headers);
-
     //В ответ на запрос сервер отвечает телом страницы и то же заголовками,
     //в которых находится статус - statusCode,
     //как правило statusCode = 200 - это значит, что страница сгенерированна нормально
+    console.log('************');
+    console.log(req.headers);
+    console.log('************');
     var urlParsed = url.parse(req.url, this);
 
     if (urlParsed.pathname == '/echo' && urlParsed.query.message) {
@@ -99,7 +100,7 @@ var server = new http.Server(function (req, res) {
         //При этом заголовки будут отправляться на сервер ни когда мы написали,
         //а вместе с какой-то записью каких-то данных, например вызов res.end( urlParsed.query.message )
         //отправляет res.end и заголовки тоже
-        res.end( urlParsed.query.message )
+        res.end(urlParsed.query.message)
         //******* 1 способ
 
         // //******* 2 способ Управления заголовками называется явный
@@ -108,7 +109,7 @@ var server = new http.Server(function (req, res) {
         // res.end( urlParsed.query.message )
         // //******* 2 способ
     }
-    else{
+    else {
         res.statusCode = 404;//Это статус - страница не найдена
         res.end('Page no found')
     }
